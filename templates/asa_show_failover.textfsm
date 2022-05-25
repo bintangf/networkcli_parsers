@@ -1,0 +1,24 @@
+Value THIS_CONTEXT_STAT (.*)
+Value THIS_INTERFACES (\S+)
+Value THIS_INTERFACE_IP (\d+\.\d+\.\d+\.\d+)
+Value THIS_INTERFACES_STATUS (.+?)
+Value THIS_INTERFACES_MONITOR (\S+)
+Value PEER_CONTEXT_STAT (.*)
+Value PEER_INTERFACES (\S+)
+Value PEER_INTERFACE_IP (\d+\.\d+\.\d+\.\d+)
+Value PEER_INTERFACES_STATUS (.+?)
+Value PEER_INTERFACES_MONITOR (\S+)
+
+Start
+  ^Failover On
+  ^[Ll]ast\s+[Ff]ailover\s+at:\s+\d+:\d+:\d+\s+\w+\s+\w+\s+\d+\s+\d+\s
+  ^\sThis\s+context:\s+${THIS_CONTEXT_STAT}\s*$$ -> ThisContext
+  
+ThisContext
+  ^\s+Active\stime:\s+\d+\d\s+\(sec\)
+  ^\s*(\S+\s+|)Interface\s+${THIS_INTERFACES}\s\(${THIS_INTERFACE_IP}\):\s+${THIS_INTERFACES_STATUS}(?:\s+\(${THIS_INTERFACES_MONITOR}\)|)\s*$$
+  ^\sPeer\s+context:\s+${PEER_CONTEXT_STAT}\s*$$ -> PeerContext
+
+PeerContext
+  ^\s+Active\stime:\s+\d+\d\s+\(sec\)
+  ^\s*(\S+\s+|)Interface\s+${PEER_INTERFACES}\s\(${PEER_INTERFACE_IP}\):\s+${PEER_INTERFACES_STATUS}(?:\s+\(${PEER_INTERFACES_MONITOR}\)|)\s*$$
